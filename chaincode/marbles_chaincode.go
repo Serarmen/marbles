@@ -61,7 +61,7 @@ type AllTrades struct {
 }
 
 type Licencia struct {
-	Ower        string `json:"ower"`
+	Owner       string `json:"owner"`
 	Descripcion string `json:"descripcion"`
 	F_ini       string `json:"f_ini"` //unused
 	F_fin       string `json:"f_fin"` //unused
@@ -131,9 +131,9 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	---- ESCRITURA DE DATOS EN EL HYPERLEDGE -------------
 	**/
 	//jsonAsBytes, _ := json.Marshal(marbleIndex) //esto sirve para pasar de objeto a JSON (string)
-	nuevo := `{"ower": "` + ower + `", "descripcion": "` + descripcion + `", "f_ini": "` + f_ini + `", "f_fin": "` + f_fin + `"}` //primero se crea el json. Puede crearse a mano o con ayuda de la libreria
-	err = stub.PutState(clave, []byte(nuevo))                                                                                     //Se escribe en el hyperledge. Primero la clave, luego el valor. El valor se escribee como un array de bytes. Si ya existe la clave esta sera SOBREESCRITA
-	if err != nil {                                                                                                               //Si algo peta al escribir....
+	nuevo := `{"owner": "` + ower + `", "descripcion": "` + descripcion + `", "f_ini": "` + f_ini + `", "f_fin": "` + f_fin + `"}` //primero se crea el json. Puede crearse a mano o con ayuda de la libreria
+	err = stub.PutState(clave, []byte(nuevo))                                                                                      //Se escribe en el hyperledge. Primero la clave, luego el valor. El valor se escribee como un array de bytes. Si ya existe la clave esta sera SOBREESCRITA
+	if err != nil {                                                                                                                //Si algo peta al escribir....
 		return nil, err
 	}
 
@@ -177,7 +177,12 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return res, err
 	} else if function == "remove_trade" { //cancel an open trade order
 		return t.remove_trade(stub, args)
+	} else if function == "crear_licencia" { //Crea una licencia
+		return t.crear_licencia(stub, args)
+	} else if function == "transpasar_licencia" { //Transpasa una licencia
+		return t.transpasar_licencia(stub, args)
 	}
+
 	fmt.Println("invoke did not find func: " + function) //error
 
 	return nil, errors.New("Received unknown function invocation")
@@ -679,4 +684,92 @@ func cleanTrades(stub shim.ChaincodeStubInterface) (err error) {
 
 	fmt.Println("- end clean trades")
 	return nil
+}
+
+func (t *SimpleChaincode) crear_licencia(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+	//0      1      2      3    4
+	//clave owner descrip fini ffin
+	if len(args) != 5 {
+		return nil, errors.New("Parametros incorrectos para crear una licencia. Esperando 4")
+	}
+
+	//input sanitation
+	fmt.Println("- Creando licencia")
+	if len(args[0]) <= 0 {
+		return nil, errors.New("1st argument must be a non-empty string")
+	}
+	if len(args[1]) <= 0 {
+		return nil, errors.New("2nd argument must be a non-empty string")
+	}
+	if len(args[2]) <= 0 {
+		return nil, errors.New("3rd argument must be a non-empty string")
+	}
+	if len(args[3]) <= 0 {
+		return nil, errors.New("4th argument must be a non-empty string")
+	}
+	clave := args[0]
+	owner := strings.ToLower(args[1])
+	descripcion := strings.ToLower(args[2])
+	f_ini := strings.ToLower(args[3])
+	f_fin := strings.ToLower(args[4])
+
+	//mirar que la clave ya no exista y la sobre-esribamos
+	marbleAsBytes, err := stub.GetState(clave)
+	if err != nil {
+		return nil, errors.New("Failed to get marble name")
+	}
+	res := Licencia{}
+	json.Unmarshal(marbleAsBytes, &res)
+	if res.Owner == owner {
+		fmt.Println("La licencia ya existe: " + owner)
+		return nil, errors.New("Se intenta crear una licencia con un id ya existente! Abortando") //all stop a marble by this name exists
+	}
+
+	nuevo := `{"owner": "` + owner + `", "descripcion": "` + descripcion + `", "f_ini": "` + f_ini + `", "f_fin": "` + f_fin + `"}` //primero se crea el json. Puede crearse a mano o con ayuda de la libreria
+	err = stub.PutState(clave, []byte(nuevo))                                                                                       //Se escribe en el hyperledge. Primero la clave, luego el valor. El valor se escribee como un array de bytes. Si ya existe la clave esta sera SOBREESCRITA
+	if err != nil {                                                                                                                 //Si algo peta al escribir....
+		return nil, err
+	}
+
+	fmt.Println("- Licencia creada")
+	return nil, nil
+}
+
+func (t *SimpleChaincode) transpasar_licencia(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+	//0      1
+	//clave nuevo_owner
+	if len(args) != 2 {
+		return nil, errors.New("Parametros incorrectos para transpasar una licencia. Esperando 2")
+	}
+
+	//input sanitation
+	fmt.Println("- Transpasando licencia")
+	if len(args[0]) <= 0 {
+		return nil, errors.New("1st argument must be a non-empty string")
+	}
+	if len(args[1]) <= 0 {
+		return nil, errors.New("2nd argument must be a non-empty string")
+	}
+	clave := args[0]
+	owner := strings.ToLower(args[1])
+
+	//mirar que la clave ya exista y la sobre-esribamos
+	marbleAsBytes, err := stub.GetState(clave)
+	if err != nil {
+		return nil, errors.New("No se ha encontrado la licencia a transpasar")
+	}
+	res := Licencia{}
+	json.Unmarshal(marbleAsBytes, &res) //un stringify it aka JSON.parse()
+	res.Owner = owner                   //Cambiamos al owner
+	// y lo volvemos a escribir en el libro
+	jsonAsBytes, _ := json.Marshal(res)
+	err = stub.PutState(clave, jsonAsBytes) //rewrite the marble with id as key
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("- Se ha transpasado la licencia")
+	return nil, nil
 }
