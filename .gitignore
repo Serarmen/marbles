@@ -6,3 +6,5 @@
 .idea
 .project
 /cc_summaries
+fabric-images/
+node_modules/
