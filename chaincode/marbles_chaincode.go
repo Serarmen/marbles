@@ -697,16 +697,16 @@ func (t *SimpleChaincode) crear_licencia(stub shim.ChaincodeStubInterface, args 
 	//input sanitation
 	fmt.Println("- Creando licencia")
 	if len(args[0]) <= 0 {
-		return nil, errors.New("1st argument must be a non-empty string")
+		return nil, errors.New("El primer argumento debe ser un string no vacio")
 	}
 	if len(args[1]) <= 0 {
-		return nil, errors.New("2nd argument must be a non-empty string")
+		return nil, errors.New("El segundo argumento debe ser un string no vacio")
 	}
 	if len(args[2]) <= 0 {
-		return nil, errors.New("3rd argument must be a non-empty string")
+		return nil, errors.New("El tercer argumento debe ser un string no vacio")
 	}
 	if len(args[3]) <= 0 {
-		return nil, errors.New("4th argument must be a non-empty string")
+		return nil, errors.New("El cuarto argumento debe ser un string no vacio")
 	}
 	clave := args[0]
 	owner := strings.ToLower(args[1])
@@ -717,7 +717,7 @@ func (t *SimpleChaincode) crear_licencia(stub shim.ChaincodeStubInterface, args 
 	//mirar que la clave ya no exista y la sobre-esribamos
 	marbleAsBytes, err := stub.GetState(clave)
 	if err != nil {
-		return nil, errors.New("Failed to get marble name")
+		return nil, errors.New("Fallo al buscar la clave al crear la licencia")
 	}
 	res := Licencia{}
 	json.Unmarshal(marbleAsBytes, &res)
@@ -747,10 +747,10 @@ func (t *SimpleChaincode) transpasar_licencia(stub shim.ChaincodeStubInterface, 
 	//input sanitation
 	fmt.Println("- Transpasando licencia")
 	if len(args[0]) <= 0 {
-		return nil, errors.New("1st argument must be a non-empty string")
+		return nil, errors.New("El primer argumento debe ser un string no vacio")
 	}
 	if len(args[1]) <= 0 {
-		return nil, errors.New("2nd argument must be a non-empty string")
+		return nil, errors.New("El segundo argumento debe ser un string no vacio")
 	}
 	clave := args[0]
 	owner := strings.ToLower(args[1])
