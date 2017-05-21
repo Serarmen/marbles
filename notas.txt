@@ -1,0 +1,7 @@
+Para cargar la red (en la carpeta de docker):
+. setenv.sh
+docker-compose -f single-peer-ca.yaml up
+
+Para borrar las imagenes y recargar la cadena: 
+docker rm -f $(docker ps -aq)
+
