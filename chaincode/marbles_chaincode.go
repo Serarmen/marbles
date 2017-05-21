@@ -119,13 +119,14 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	descripcion := "Licencia inicial de prueba"
 	f_ini := "Fecha de inicio"
 	f_fin := "Fecha de fin"
+	/* Si se realiza esta busqueda al iniciar peta
 	datos, err := stub.GetState(clave) //Esto busca en el hyperledge por CLAVE. Si no existe devuelve err, si no devuelve la clave como primer parametro
 	if err == nil {                    //si no encuentra la clave err esta declarado. En este caso nos interesa que no la encuentre.
 		return nil, errors.New("La clave inicial de prueba ya esta en la cadena. ¿No se ha reiniciado la cadena?")
 	}
-
 	res := Licencia{}           //Primero se crea un objeto licencia vacio
 	json.Unmarshal(datos, &res) //Despues se desempaqueta el JSON de lo obtenido anteriormente en ese objeto
+	*/
 	/**
 	---- ESCRITURA DE DATOS EN EL HYPERLEDGE -------------
 	**/
