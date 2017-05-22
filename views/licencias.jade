@@ -61,6 +61,16 @@ block content
 						button(type="button")#modificar
 							span.fa.fa-check &nbsp;&nbsp;
 							span MODIFICAR LICENCIA
+				div
+					form(action="/create" method="POST")#createform
+						legend 
+							input(type="text" name="clave3" placeholder="ID de la licencia a buscar")
+							span.hint &nbsp;&nbsp;ID de la licencia a buscar
+						br
+						button(type="button")#get
+							span.fa.fa-check &nbsp;&nbsp;
+							span BUSCAR LICENCIA
+					p#resultado
 		
 		
 		// --------------- Create Panel

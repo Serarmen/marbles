@@ -53,6 +53,11 @@ module.exports.process_msg = function(ws, data){
 			if (data.clave && data.owner){
 				chaincode.invoke.transpasar_licencia([data.clave, data.owner])
 			}
+		}else if(data.type == 'get_licencia'){
+			console.log('Buscando una licencia');
+			chaincode.query.read([data.clave], function (clave,valor){
+				sendMsg({msg: 'resutado', clave: clave, valor: valor}); //Se envia el resultado al cliente
+			});
 		}
 	}
 

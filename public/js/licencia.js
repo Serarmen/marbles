@@ -44,6 +44,19 @@ $(document).on('ready', function() {
 		}
 		return false;
 	});
+	$('#get').click(function(){
+		console.log('Buscando licencia');
+		var obj = 	{
+						type: 'get_licencia',
+						clave: $('input[name="clave3"]').val(),
+						v: 1
+					};
+		if(obj.clave){
+			console.log('Buscando licencia, enviado', obj);
+			ws.send(JSON.stringify(obj));
+		}
+		return false;
+	});
 	
 	$('#homeLink').click(function(){
 		showHomePanel();
@@ -207,6 +220,8 @@ function connect_to_server(){
 					};
 					new_block(temp);								//send to blockchain.js
 				}
+			}else if (msgObj.msg === 'resutado'){ //Respuesta a una peticion de busqueda
+				$('#resultado').html("Encontrado: "+msgObj.valor);
 			}
 			else console.log('rec', msgObj.msg, msgObj);
 		}
