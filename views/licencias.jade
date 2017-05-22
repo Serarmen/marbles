@@ -48,6 +48,19 @@ block content
 						button(type="button")#submit
 							span.fa.fa-check &nbsp;&nbsp;
 							span CREAR LICENCIA
+				div
+					form(action="/create" method="POST")#createform
+						legend 
+							input(type="text" name="clave2" placeholder="ID de la licencia a transpasar")
+							span.hint &nbsp;&nbsp;ID de la licencia a modificar
+						br
+						legend 
+							input(type="text" name="owner2" placeholder="Nuevo owner")
+							span.hint &nbsp;&nbsp;Nuevo owner de la licencia
+						br
+						button(type="button")#modificar
+							span.fa.fa-check &nbsp;&nbsp;
+							span MODIFICAR LICENCIA
 		
 		
 		// --------------- Create Panel

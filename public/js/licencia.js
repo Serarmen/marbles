@@ -30,6 +30,20 @@ $(document).on('ready', function() {
 		}
 		return false;
 	});
+	$('#modificar').click(function(){
+		console.log('Transpasando licencia');
+		var obj = 	{
+						type: 'transpasar_licencia',
+						clave: $('input[name="clave2"]').val(),
+						owner: $('input[name="owner2"]').val(),
+						v: 1
+					};
+		if(obj.clave && obj.owner){
+			console.log('Transpasando licencia, enviado', obj);
+			ws.send(JSON.stringify(obj));
+		}
+		return false;
+	});
 	
 	$('#homeLink').click(function(){
 		showHomePanel();
