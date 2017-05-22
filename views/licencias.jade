@@ -3,27 +3,51 @@ extends ./template/layout.jade
 	
 // --------------- Header -------------- //
 block custom_header
-	script(src='/js/part1.js?v=#{bag.jshash}')
+	script(src='/js/licencia.js')
 	script(type='text/javascript').
 		$(document).ready(function(){
 			
 		});
-		
-		
-// --------------- Navigation Bar  -------------- //
-block navpanel
-	include ./template/nav_part1.jade
+
 	
 	
 // --------------- Main Stuff  -------------- //
 block content
 	#contentPanel
 		
-		#blockdate(title="date of last block") loading...
-		
 		
 		// --------------- Home Panel
-		include ./panel_home.jade
+		#homePanel.panel
+			div
+				h1 Licencias
+				hr
+				
+			#micontenido
+				div
+					form(action="/create" method="POST")#createform
+						legend 
+							input(type="text" name="clave" placeholder="ID de la licencia")
+							span.hint &nbsp;&nbsp;Creando una licencia
+						br
+						legend 
+							input(type="text" name="owner" placeholder="Owner")
+							span.hint &nbsp;&nbsp;Owner
+						br
+						legend 
+							input(type="text" name="descripcion" placeholder="Descripcion de la licencia")
+							span.hint &nbsp;&nbsp;Descripcion
+						br
+						legend 
+							input(type="text" name="f_ini" placeholder="Fecha de inicio")
+							span.hint &nbsp;&nbsp;Fecha inicio
+						br
+						legend 
+							input(type="text" name="f_fin" placeholder="Fecha fin")
+							span.hint &nbsp;&nbsp;Fecha fin
+						br
+						button(type="button")#submit
+							span.fa.fa-check &nbsp;&nbsp;
+							span CREAR LICENCIA
 		
 		
 		// --------------- Create Panel
