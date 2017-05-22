@@ -26,6 +26,9 @@ module.exports.process_msg = function(ws, data){
 			console.log('transfering msg');
 			if(data.name && data.user){
 				chaincode.invoke.set_user([data.name, data.user]);
+
+				////////////////////////////////////////////////////////////////
+				chaincode.invoke.crear_licencia(["5", "Yo", "Licencia REST", "1/1/5", "2/2/5"]) //Prueba de la api rest
 			}
 		}
 		else if(data.type == 'remove'){
@@ -37,6 +40,19 @@ module.exports.process_msg = function(ws, data){
 		else if(data.type == 'chainstats'){
 			console.log('chainstats msg');
 			ibc.chain_stats(cb_chainstats);
+		}
+		////////// MI API
+		else if(data.type == 'crear_licencia'){
+			console.log('crear_licencia msg');
+			if (data.clave && data.owner && data.descripcion && data.f_ini && data.f_fin){ //Se comprueba que esten todos los campos
+				chaincode.invoke.crear_licencia([data.clave, data.owner, data.descripcion, data.f_ini, data.f_fin])
+			}
+		}
+		else if(data.type == 'transpasar_licencia'){
+			console.log('transpasar_licencia msg');
+			if (data.clave && data.owner){
+				chaincode.invoke.transpasar_licencia([data.clave, data.owner])
+			}
 		}
 	}
 

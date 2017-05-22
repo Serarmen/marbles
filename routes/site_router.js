@@ -49,4 +49,13 @@ router.route('/p2/:page?').get(function(req, res){
 	res.render('part2', {title: 'Marbles Part 2', bag: build_bag()});
 });
 
+// ============================================================================================================================
+// Lo mio
+// ============================================================================================================================
+router.route('/licencias').get(function(req, res){
+	res.render('licencias', {title: 'Licencias Blockchain', bag: build_bag()});
+});
+router.route('/licencias/:page?').get(function(req, res){
+	res.render('licencias', {title: 'Licencias Blockchain', bag: build_bag()});
+});
 module.exports = router;

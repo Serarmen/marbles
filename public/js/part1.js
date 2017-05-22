@@ -131,6 +131,34 @@ $(document).on('ready', function() {
 							v: 1
 						};
 			ws.send(JSON.stringify(obj));
+
+			/////// MI CODIGO
+			/* //Crear licencia
+			 
+			console.log('Iniciando mi peticion custom')
+			var MiObj = 	{
+				type: 'crear_licencia',
+				clave: "10",
+				owner: "Un tipo muy simpatico",
+				descripcion: "Una licencia a perpetiudad",
+				f_ini: "1/1/2000",
+				f_fin: "2/2/3000",
+				v: 1
+			};
+			ws.send(JSON.stringify(MiObj));
+
+			
+			// Transpasar licencia
+			console.log('Iniciando mi peticion custom- Transpaso de licencia')
+			var MiObj = 	{
+				type: 'transpasar_licencia',
+				clave: "1",
+				owner: "Un tipo muy simpatico",
+				v: 1
+			};
+			ws.send(JSON.stringify(MiObj));
+			*/
+
 			showHomePanel();
 		}
 	}
